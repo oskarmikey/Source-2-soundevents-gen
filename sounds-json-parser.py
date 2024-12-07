@@ -11,7 +11,7 @@ def get_files_from_directory(directory):
     return files
 
 def group_files(filenames):
-    """Group filenames by common parts of the name, ignoring suffixes like numbers, and include their directory."""
+    """Group filenames based on the base name, removing numbers and suffixes."""
     grouped_files = {}
 
     for filename in filenames:
@@ -24,17 +24,20 @@ def group_files(filenames):
 
         base_name_without_extension = re.sub(r'\.[^.]+$', '', base_name)  # Remove file extension
         
-        # Remove numbers from the base name to handle variations like 'bird2', 'bird3', etc.
-        group_key = re.sub(r'\d+$', '', base_name_without_extension)
+        # Step 1: Remove numbers from the end of the base name
+        group_key = re.sub(r'\d+$', '', base_name_without_extension)  # Remove numbers at the end of base name
 
-        # Group the files by directory first, then by base name
+        # Step 2: Remove underscores at the end of the base name (if any)
+        group_key = group_key.rstrip('_')  # Remove trailing underscores
+        
+        # Step 3: Group files by their directory and base name (group key)
         if directory not in grouped_files:
             grouped_files[directory] = {}
 
         if group_key not in grouped_files[directory]:
             grouped_files[directory][group_key] = []
 
-        # Add the file to the directory group under its base name
+        # Add the file to the group
         grouped_files[directory][group_key].append(base_name)
 
     return grouped_files
@@ -49,10 +52,11 @@ def main():
     folder_path = r"C:\PUT\IN\YOUR\tf2-stuff\DIRECTORY\TO\sounds"  # CHANGE THIS TO BE YOUR ACTUAL SOUNDS PATH
     output_file = "grouped_sounds.json"  # THE NAME OF YOUR OUTPUT JSON FILE VERY IMPORTANT
 
+
     # Step 1: Get all the files from the directory and subdirectories
     filenames = get_files_from_directory(folder_path)
 
-    # Step 2: Group the files by their directory and base name
+    # Step 2: Group the files by their directory and base name, removing numbers and underscores
     grouped_files = group_files(filenames)
 
     # Step 3: Write the grouped files to a JSON file
