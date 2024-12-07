@@ -52,7 +52,6 @@ def main():
     folder_path = r"C:\PUT\IN\YOUR\tf2-stuff\DIRECTORY\TO\sounds"  # CHANGE THIS TO BE YOUR ACTUAL SOUNDS PATH
     output_file = "grouped_sounds.json"  # THE NAME OF YOUR OUTPUT JSON FILE VERY IMPORTANT
 
-
     # Step 1: Get all the files from the directory and subdirectories
     filenames = get_files_from_directory(folder_path)
 
